@@ -7,40 +7,46 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class SelectionScreen extends JPanel
 {
+     Font arcadeOne;
     private static final long serialVersionUID = 1L;
     Player player = new Player();
     SelectionScreen()
     {
+        arcadeOne = loadFont("../Resources/fonts/ARCADE_N.TTF");
 
         player.playMusic("C:\\Users\\georg\\Documents\\Development\\Java\\UniProjects\\Week7\\src\\Resources\\audio\\selectionmusic.wav");
+
         this.setLayout(new BorderLayout(0,0));
         this.add(createNorthPanel(), BorderLayout.NORTH);
         this.add(createCenterPanel(), BorderLayout.CENTER);
         this.add(createSouthPanel(), BorderLayout.SOUTH);
-        //this.add(pic,BorderLayout.CENTER);
     }
     private JPanel createNorthPanel()
     {
         JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(100,200));
-        JLabel label = new JLabel("SELECT YOUR SPACESHIP ");
-        label.setFont(new Font("Arcade Classic", Font.BOLD, 38));
+        panel.setPreferredSize(new Dimension(100,190));
+        JLabel label = new JLabel("SELECT YOUR SPACESHIP");
+        label.setFont(arcadeOne);
+        label.setFont(label.getFont().deriveFont(Font.BOLD,30));
         label.setForeground(Color.YELLOW);
         panel.setBackground(Color.BLACK);
+
         panel.add(label);
         return panel;
     }
     private JPanel createCenterPanel()
     {
-        JButton btnSpaceShipZero = new JButton();
-        JButton btnSpaceShipAlpha = new JButton();
-        JButton btnSpaceShipBeta = new JButton();
-        JButton btnSpaceShipGamma = new JButton();
-        JButton btnSpaceShipDelta = new JButton();
+        JButton btnSpaceShipZero = new JButton("ZERO");
+        JButton btnSpaceShipAlpha = new JButton("ALPHA");
+        JButton btnSpaceShipBeta = new JButton("BETA");
+        JButton btnSpaceShipGamma = new JButton("GAMA");
+        JButton btnSpaceShipDelta = new JButton("DELTA");
 
         btnSpaceShipZero.addActionListener(new SpaceShipSelectionButtonHandler("SZERO", btnSpaceShipZero, player));
         btnSpaceShipAlpha.addActionListener(new SpaceShipSelectionButtonHandler("SALPHA", btnSpaceShipAlpha, player));
@@ -54,6 +60,11 @@ public class SelectionScreen extends JPanel
         addHover(btnSpaceShipGamma);
         addHover(btnSpaceShipDelta);
 
+        configureButtonText(btnSpaceShipZero);
+        configureButtonText(btnSpaceShipAlpha);
+        configureButtonText(btnSpaceShipBeta);
+        configureButtonText(btnSpaceShipGamma);
+        configureButtonText(btnSpaceShipDelta);
 
         btnSpaceShipZero.setIcon(new ImageIcon(SpaceShipZero.img));
         btnSpaceShipAlpha.setIcon(new ImageIcon(SpaceShipAlpha.img));
@@ -83,10 +94,17 @@ public class SelectionScreen extends JPanel
 
     private JPanel createSouthPanel()
     {
+        JButton btnExit = new JButton("EXIT");
+        JPanel tmp = new JPanel();
         JPanel panel = new JPanel();
+        tmp.setLayout(new BorderLayout());
+        tmp.setPreferredSize(new Dimension(100,50));
         panel.setPreferredSize(new Dimension(800,200));
-        panel.setLayout(new GridLayout());
         panel.setBackground(Color.BLACK);
+        tmp.setBackground(Color.WHITE);
+
+        tmp.add(btnExit, BorderLayout.CENTER);
+        panel.add(tmp);
         return panel;
     }
 
@@ -116,6 +134,32 @@ public class SelectionScreen extends JPanel
         });
     }
 
+    private void configureButtonText(JButton btn)
+    {
+        btn.setFont(arcadeOne);
+        btn.setFont(btn.getFont().deriveFont(Font.BOLD, 15));
+        btn.setForeground(Color.RED);
+        btn.setHorizontalTextPosition(JButton.CENTER);
+        btn.setVerticalTextPosition(JButton.NORTH);
+    }
+
+    private Font loadFont(String path)
+    {
+        Font font = null;
+        try{
+            InputStream io = getClass().getResourceAsStream(path);
+            font = Font.createFont(Font.TRUETYPE_FONT, io);
+        }
+        catch (FontFormatException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return font;
+    }
 
 
 }
